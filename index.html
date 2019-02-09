@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>ZABIFFF</title>
+	<style type="text/css">
+		body{text-align: center;
+			background:url("fons.png"),
+							linear-gradient(red,orange,yellow,green,skyblue,blue,purple,red);
+		}
+		#canvas{border:1px solid;background-color:white;}
+		#qwe{
+			margin: 0 auto;
+			width:720px;
+			background-color: rgb(200,200,200);
+		}
+	</style>
+</head>
+<body>
+	<canvas id="canvas" width="720px" height="300px">канвас не работает браузер другой нужен</canvas>
+	<br>
+	<div id="qwe">
+		Денег:<div id="deneg">1000</div>
+		<br>
+		<button onclick="t1start()" id="btn1">
+			<img src="chicken.png" height="64px"><p>ЗА ЛЕВЫХ<p>
+		</button>
+		<button onclick="t2start()" id="btn2">
+			<img src="rooster.png" height="64px"><p>ЗА ПРАВЫХ<p>
+		</button>
+		<br>
+		<button onclick="spravka()">
+			<img src="spr.png" height="64px"><p>СПРАВКА<p>
+		</button>
+	</div>
+	<script type="text/javascript">
+		
+		var ctx    = document.getElementById("canvas").getContext("2d");
+		var width  = 720,
+			height = 300;
+		var spr    = new Image();
+		var spr2   = new Image();
+		var att    = new Image();
+		var att2   = new Image();
+		var cadr   = 0;
+		var x      = 700;
+		var x2     = -50;
+		var t1count= 5;
+		var t2count= 5;
+		var t1att  = false;
+		var t2att  = false;
+		var muz    = new Audio();
+		var attcadr= 0;
+		var fon    = new Image();
+		var battle = false;
+		var lefthp = 500;
+		var righthp= 500;
+		var t1win  = false;
+		var t2win  = false;
+		var gamestr= true;
+		var tgolos = 0;
+		var money  = 1000;
+		fon.src="fon.png";
+		muz.src="muz.mp3";
+		spr.src="run.png";
+		spr2.src="run2.png";
+		att.src="attack.png";
+		att2.src="attack2.png";
+		ctx.drawImage(fon,0,0);
+		function getRandomInt(min, max) {
+ 			 return Math.floor(Math.random() * (max - min)) + min;
+		}
+		
+		function drawZabivnik(){
+			if(x<=x2+30){
+				t1att=true;
+				t2att=true;
+			}else{
+				x--
+				x2++
+			}
+			for(var i=0;i<t2count;i++){
+				if(t1att){ctx.drawImage(att,96*attcadr,0,96,96,x,50*i,96,96);}else{
+					ctx.drawImage(spr,96*cadr,0,96,96,x,50*i,96,96);
+				}
+			}
+			for(var i=0;i<t1count;i++){
+				if(t2att){ctx.drawImage(att2,96*attcadr,0,96,96,x2,50*i,96,96);}else{
+					ctx.drawImage(spr2,96*cadr,0,96,96,x2,50*i,96,96);
+				}
+			}
+		}
+		function game(){
+			if(t1win==true){
+				alert("ЛЕВЫЕ ПОБЕДИЛИ");
+				gamestr=false;
+			}else if(t2win==true){
+				alert("ПРАВЫЕ ПОБЕДИЛИ")
+				gamestr=false;
+			}
+			ctx.drawImage(fon,0,0);
+			//картинка,позиция начала счета по X,позиция начала счетаY,ширина считываемого,высота счит,размер X,размер Y
+			drawZabivnik();
+			document.getElementById("deneg").innerHTML=money;
+			if(gamestr){
+				requestAnimationFrame(game);
+			}else{
+				muz.pause()
+				muz.currentTime=0;
+				document.getElementById("btn1").style.display="inline";
+				document.getElementById("btn2").style.display="inline";
+				if(tgolos=1){
+					if(t1win){
+						money+=2000;
+						document.getElementById("deneg").innerHTML=money;
+					}else{document.getElementById("deneg").innerHTML=money;}
+				}else{
+					if(t2win){
+						money+=2000;
+						document.getElementById("deneg").innerHTML=money;
+					}else{document.getElementById("deneg").innerHTML=money;}
+				}
+
+			}
+		}
+		function t1start(){
+			money=money-1000;
+			document.getElementById("btn1").style.display="none";
+			document.getElementById("btn2").style.display="none";
+			if(money<0){money=0}
+			document.getElementById("deneg").innerHTML=money;
+			tgolos = 1;
+			x      = 650;
+			x2     = 0;
+			t1count= 5;
+			t2count= 5;
+			t1att  = false;
+			t2att  = false;
+			attcadr= 0;
+			battle = false;
+			lefthp = 500;
+			righthp= 500;
+			t1win  = false;
+			t2win  = false;
+			gamestr= true;
+			muz.volume=0.1;
+			muz.play()
+			spr.onload=game();
+			var bam = setInterval(function(){
+				if(x<=x2+30){
+					attcadr++
+					lefthp-=getRandomInt(2,10);
+					righthp-=getRandomInt(2,10);
+					if(t1count<=0){
+						t2win=true;
+						clearInterval(bam);
+						t1att=false;
+						t2att=false;
+					}else if(t2count<=0){
+						t1win=true;
+						clearInterval(bam);
+						t1att=false;
+						t2att=false;
+					}
+					if(lefthp>=400&&lefthp<=500){
+						t1count=5;
+					}else if(lefthp>300&&lefthp<=400){
+						t1count=4;
+					}else if(lefthp>200&&lefthp<=300){
+						t1count=3;
+					}else if(lefthp>100&&lefthp<=200){
+						t1count=2;
+					}else if(lefthp>0&&lefthp<=100){
+						t1count=1;
+					}else if(lefthp<=0){
+						t1count=0;
+					}
+					if(righthp>=400&&righthp<=500){
+						t2count=5;
+					}else if(righthp>300&&righthp<=400){
+						t2count=4;
+					}else if(righthp>200&&righthp<=300){
+						t2count=3;
+					}else if(righthp>100&&righthp<=200){
+						t2count=2;
+					}else if(righthp>0&&righthp<=100){
+						t2count=1;
+					}else if(righthp<=0){
+						t2count=0;
+					}
+					if(attcadr>=6){attcadr=0}
+				}else{
+					cadr++
+					if(cadr>=6){cadr=0}
+				}
+			},100);
+		}
+		function t2start(){
+			money=money-1000;
+			document.getElementById("deneg").innerHtml=money;
+			document.getElementById("btn1").style.display="none";
+			document.getElementById("btn2").style.display="none";
+			if(money<0){money=0}
+			document.getElementById("deneg").innerHTML=money;
+			tgolos = 2;
+			x      = 650;
+			x2     = 0;
+			t1count= 5;
+			t2count= 5;
+			t1att  = false;
+			t2att  = false;
+			attcadr= 0;
+			battle = false;
+			lefthp = 500;
+			righthp= 500;
+			t1win  = false;
+			t2win  = false;
+			gamestr= true;
+			muz.volume=0.1;
+			muz.play()
+			spr.onload=game();
+			var bam = setInterval(function(){
+				if(x<=x2+30){
+					attcadr++
+					lefthp-=getRandomInt(2,10);
+					righthp-=getRandomInt(2,10);
+					if(t1count<=0){
+						t2win=true;
+						clearInterval(bam);
+						t1att=false;
+						t2att=false;
+					}else if(t2count<=0){
+						t1win=true;
+						clearInterval(bam);
+						t1att=false;
+						t2att=false;
+					}
+					if(lefthp>=400&&lefthp<=500){
+						t1count=5;
+					}else if(lefthp>300&&lefthp<=400){
+						t1count=4;
+					}else if(lefthp>200&&lefthp<=300){
+						t1count=3;
+					}else if(lefthp>100&&lefthp<=200){
+						t1count=2;
+					}else if(lefthp>0&&lefthp<=100){
+						t1count=1;
+					}else if(lefthp<=0){
+						t1count=0;
+					}
+					if(righthp>=400&&righthp<=500){
+						t2count=5;
+					}else if(righthp>300&&righthp<=400){
+						t2count=4;
+					}else if(righthp>200&&righthp<=300){
+						t2count=3;
+					}else if(righthp>100&&righthp<=200){
+						t2count=2;
+					}else if(righthp>0&&righthp<=100){
+						t2count=1;
+					}else if(righthp<=0){
+						t2count=0;
+					}
+					if(attcadr>=6){attcadr=0}
+				}else{
+					cadr++
+					if(cadr>=6){cadr=0}
+				}
+			},100);
+		}
+		function spravka(){
+			alert("саздатель webjcou vk.com/myphpsql ")
+		}
+	</script>
+</body>
+</html>
