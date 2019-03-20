@@ -93,9 +93,33 @@
 		function game(){
 			if(t1win==true){
 				alert("ЛЕВЫЕ ПОБЕДИЛИ");
+				if(tgolos==1){
+					if(t1win){
+						money+=2000;
+						document.getElementById("deneg").innerHTML=money;
+					}else{document.getElementById("deneg").innerHTML=money;}
+				}
+				if(tgolos==2){
+					if(t2win){
+						money+=2000;
+						document.getElementById("deneg").innerHTML=money;
+					}else{document.getElementById("deneg").innerHTML=money;}
+				}
 				gamestr=false;
 			}else if(t2win==true){
-				alert("ПРАВЫЕ ПОБЕДИЛИ")
+				alert("ПРАВЫЕ ПОБЕДИЛИ");
+				if(tgolos==1){
+					if(t1win){
+						money+=2000;
+						document.getElementById("deneg").innerHTML=money;
+					}else{document.getElementById("deneg").innerHTML=money;}
+				}
+				if(tgolos==2){
+					if(t2win){
+						money+=2000;
+						document.getElementById("deneg").innerHTML=money;
+					}else{document.getElementById("deneg").innerHTML=money;}
+				}
 				gamestr=false;
 			}
 			ctx.drawImage(fon,0,0);
@@ -109,17 +133,6 @@
 				muz.currentTime=0;
 				document.getElementById("btn1").style.display="inline";
 				document.getElementById("btn2").style.display="inline";
-				if(tgolos=1){
-					if(t1win){
-						money+=2000;
-						document.getElementById("deneg").innerHTML=money;
-					}else{document.getElementById("deneg").innerHTML=money;}
-				}else{
-					if(t2win){
-						money+=2000;
-						document.getElementById("deneg").innerHTML=money;
-					}else{document.getElementById("deneg").innerHTML=money;}
-				}
 
 			}
 		}
